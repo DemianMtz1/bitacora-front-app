@@ -1,23 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import { FormComp } from "./components/FormComp";
+import { Navbar } from "./components/Navbar";
 
 function App() {
+  
+  const [members, setMembers] = useState();
+  
+  const getMembers = async () => {
+    try {
+      const url = 'https://bitacora-app-server.herokuapp.com/members';
+
+      const response = await fetch(url);
+      const data = await response.json();
+      setMembers(data.data)
+  
+    } catch (error) {
+      console.error(error)
+    }
+  }
+  useEffect(() => {
+    getMembers();
+    
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Navbar />
+      <div className="container">
+        <div className="row">
+          <div className="col-12">
+            <FormComp  members={members} />
+          </div>
+
+        </div>
+
+      </div>
     </div>
   );
 }
